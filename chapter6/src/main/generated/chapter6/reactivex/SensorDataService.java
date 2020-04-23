@@ -80,13 +80,9 @@ public class SensorDataService {
     delegate.valueFor(sensorId, handler);
   }
 
-  public void valueFor(String sensorId) {
-    valueFor(sensorId, ar -> { });
-  }
-
   public Single<JsonObject> rxValueFor(String sensorId) { 
-    return io.vertx.reactivex.impl.AsyncResultSingle.toSingle($handler -> {
-      valueFor(sensorId, $handler);
+    return io.vertx.reactivex.impl.AsyncResultSingle.toSingle(handler -> {
+      valueFor(sensorId, handler);
     });
   }
 
@@ -94,13 +90,9 @@ public class SensorDataService {
     delegate.average(handler);
   }
 
-  public void average() {
-    average(ar -> { });
-  }
-
   public Single<JsonObject> rxAverage() { 
-    return io.vertx.reactivex.impl.AsyncResultSingle.toSingle($handler -> {
-      average($handler);
+    return io.vertx.reactivex.impl.AsyncResultSingle.toSingle(handler -> {
+      average(handler);
     });
   }
 

@@ -35,14 +35,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import io.vertx.serviceproxy.ServiceBinder;
 import io.vertx.serviceproxy.ProxyHandler;
 import io.vertx.serviceproxy.ServiceException;
 import io.vertx.serviceproxy.ServiceExceptionMessageCodec;
 import io.vertx.serviceproxy.HelperUtils;
-import io.vertx.serviceproxy.ServiceBinder;
 
 import io.vertx.core.Vertx;
 import chapter6.SensorDataService;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 /*
@@ -59,7 +60,6 @@ public class SensorDataServiceVertxProxyHandler extends ProxyHandler {
   private final long timerID;
   private long lastAccessed;
   private final long timeoutSeconds;
-  private final boolean includeDebugInfo;
 
   public SensorDataServiceVertxProxyHandler(Vertx vertx, SensorDataService service){
     this(vertx, service, DEFAULT_CONNECTION_TIMEOUT);
@@ -69,14 +69,9 @@ public class SensorDataServiceVertxProxyHandler extends ProxyHandler {
     this(vertx, service, true, timeoutInSecond);
   }
 
-  public SensorDataServiceVertxProxyHandler(Vertx vertx, SensorDataService service, boolean topLevel, long timeoutInSecond){
-    this(vertx, service, true, timeoutInSecond, false);
-  }
-
-  public SensorDataServiceVertxProxyHandler(Vertx vertx, SensorDataService service, boolean topLevel, long timeoutSeconds, boolean includeDebugInfo) {
+  public SensorDataServiceVertxProxyHandler(Vertx vertx, SensorDataService service, boolean topLevel, long timeoutSeconds) {
       this.vertx = vertx;
       this.service = service;
-      this.includeDebugInfo = includeDebugInfo;
       this.timeoutSeconds = timeoutSeconds;
       try {
         this.vertx.eventBus().registerDefaultCodec(ServiceException.class,
@@ -123,18 +118,17 @@ public class SensorDataServiceVertxProxyHandler extends ProxyHandler {
       switch (action) {
         case "valueFor": {
           service.valueFor((java.lang.String)json.getValue("sensorId"),
-                        HelperUtils.createHandler(msg, includeDebugInfo));
+                        HelperUtils.createHandler(msg));
           break;
         }
         case "average": {
-          service.average(HelperUtils.createHandler(msg, includeDebugInfo));
+          service.average(HelperUtils.createHandler(msg));
           break;
         }
         default: throw new IllegalStateException("Invalid action: " + action);
       }
     } catch (Throwable t) {
-      if (includeDebugInfo) msg.reply(new ServiceException(500, t.getMessage(), HelperUtils.generateDebugInfo(t)));
-      else msg.reply(new ServiceException(500, t.getMessage()));
+      msg.reply(new ServiceException(500, t.getMessage()));
       throw t;
     }
   }
