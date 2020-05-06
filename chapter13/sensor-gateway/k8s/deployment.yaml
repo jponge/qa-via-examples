@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sensor-gateway
+  name: sensor-gateway
+spec:
+  selector:
+    matchLabels:
+      app: sensor-gateway
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: sensor-gateway
+    spec:
+      containers:
+        - image: vertx-in-action/sensor-gateway:latest
+          name: sensor-gateway
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            timeoutSeconds: 5
