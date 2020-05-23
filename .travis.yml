@@ -22,7 +22,9 @@ env:
   - PROJECT=chapter13
   - PROJECT=part2-steps-challenge
 
-script: cd $PROJECT && ./gradlew build --refresh-dependencies
+script:
+  - cd $PROJECT
+  - ./gradlew build --refresh-dependencies
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
