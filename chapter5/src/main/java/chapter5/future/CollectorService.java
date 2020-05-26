@@ -64,7 +64,7 @@ public class CollectorService extends AbstractVerticle {
       .as(BodyCodec.jsonObject())
       .sendJson(data, ar -> {
         if (ar.succeeded()) {
-          result.complete(ar.result().body());
+          result.complete(data);
         } else {
           result.fail(ar.cause());
         }
