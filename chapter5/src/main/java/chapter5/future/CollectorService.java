@@ -7,7 +7,6 @@ import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
 import io.vertx.ext.web.codec.BodyCodec;
@@ -26,11 +25,13 @@ public class CollectorService extends AbstractVerticle {
     webClient = WebClient.create(vertx);
     vertx.createHttpServer()
       .requestHandler(this::handleRequest)
-      .listen(8080)
-      .onFailure(promise::fail)
-      .onSuccess(ok -> {
-        System.out.println("http://localhost:8080/");
-        promise.complete();
+      .listen(8080, ar -> {
+        if (ar.succeeded()) {
+          System.out.println("http://localhost:8080/");
+          promise.complete();
+        } else {
+          promise.fail(ar.cause());
+        }
       });
   }
 
@@ -50,25 +51,40 @@ public class CollectorService extends AbstractVerticle {
   }
 
   private Future<JsonObject> sendToSnapshot(CompositeFuture temps) {
+    Promise<JsonObject> result = Promise.promise();
     List<JsonObject> tempData = temps.list();
     JsonObject data = new JsonObject()
       .put("data", new JsonArray()
         .add(tempData.get(0))
         .add(tempData.get(1))
         .add(tempData.get(2)));
-    return webClient
+    webClient
       .post(4000, "localhost", "/")
       .expect(ResponsePredicate.SC_SUCCESS)
-      .sendJson(data)
-      .map(response -> data);
+      .as(BodyCodec.jsonObject())
+      .sendJson(data, ar -> {
+        if (ar.succeeded()) {
+          result.complete(ar.result().body());
+        } else {
+          result.fail(ar.cause());
+        }
+      });
+    return result.future();
   }
 
   private Future<JsonObject> fetchTemperature(int port) {
-    return webClient
+    Promise<JsonObject> result = Promise.promise();
+    webClient
       .get(port, "localhost", "/")
       .expect(ResponsePredicate.SC_SUCCESS)
       .as(BodyCodec.jsonObject())
-      .send()
-      .map(HttpResponse::body);
+      .send(ar -> {
+        if (ar.succeeded()) {
+          result.complete(ar.result().body());
+        } else {
+          result.fail(ar.cause());
+        }
+      });
+    return result.future();
   }
 }
