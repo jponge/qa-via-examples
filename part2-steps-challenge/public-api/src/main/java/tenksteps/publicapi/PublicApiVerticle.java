@@ -49,10 +49,8 @@ public class PublicApiVerticle extends AbstractVerticle {
     jwtAuth = JWTAuth.create(vertx, new JWTAuthOptions()
       .addPubSecKey(new PubSecKeyOptions()
         .setAlgorithm("RS256")
-        .setBuffer(publicKey))
-      .addPubSecKey(new PubSecKeyOptions()
-        .setAlgorithm("RS256")
-        .setBuffer(privateKey)));
+        .setPublicKey(publicKey)
+        .setSecretKey(privateKey)));
 
     Router router = Router.router(vertx);
 

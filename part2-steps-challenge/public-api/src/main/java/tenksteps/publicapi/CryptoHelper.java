@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 class CryptoHelper {
 
@@ -21,6 +22,9 @@ class CryptoHelper {
     if (!path.toFile().exists()) {
       path = Paths.get("..", "public-api", file);
     }
-    return String.join("\n", Files.readAllLines(path, StandardCharsets.UTF_8));
+    return Files.readAllLines(path, StandardCharsets.UTF_8)
+      .stream()
+      .filter(line -> !line.startsWith("----"))
+      .collect(Collectors.joining());
   }
 }

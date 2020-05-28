@@ -4,12 +4,9 @@ import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.MaybeSource;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.mongo.MongoAuthenticationOptions;
-import io.vertx.ext.auth.mongo.MongoAuthorizationOptions;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.Vertx;
-import io.vertx.reactivex.ext.auth.mongo.MongoAuthentication;
-import io.vertx.reactivex.ext.auth.mongo.MongoUserUtil;
+import io.vertx.reactivex.ext.auth.mongo.MongoAuth;
 import io.vertx.reactivex.ext.mongo.MongoClient;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
@@ -20,14 +17,15 @@ import org.slf4j.LoggerFactory;
 import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
+import static java.util.Collections.emptyList;
+
 public class UserProfileApiVerticle extends AbstractVerticle {
 
   private static final int HTTP_PORT = 3000;
   private static final Logger logger = LoggerFactory.getLogger(UserProfileApiVerticle.class);
 
   private MongoClient mongoClient;
-  private MongoAuthentication authProvider;
-  private MongoUserUtil userUtil;
+  private MongoAuth authProvider;
 
   private JsonObject mongoConfig() {
     return new JsonObject()
@@ -40,8 +38,7 @@ public class UserProfileApiVerticle extends AbstractVerticle {
   public Completable rxStart() {
     mongoClient = MongoClient.createShared(vertx, mongoConfig());
 
-    authProvider = MongoAuthentication.create(mongoClient, new MongoAuthenticationOptions());
-    userUtil = MongoUserUtil.create(mongoClient, new MongoAuthenticationOptions(), new MongoAuthorizationOptions());
+    authProvider = MongoAuth.create(mongoClient, new JsonObject());
 
     Router router = Router.router(vertx);
     BodyHandler bodyHandler = BodyHandler.create();
@@ -112,8 +109,8 @@ public class UserProfileApiVerticle extends AbstractVerticle {
         .put("deviceId", body.getString("deviceId"))
         .put("makePublic", body.getBoolean("makePublic")));
 
-    userUtil
-      .rxCreateUser(username, password)
+    authProvider
+      .rxInsertUser(username, password, emptyList(), emptyList())
       .flatMapMaybe(docId -> insertExtraInfo(extraInfo, docId))
       .ignoreElement()
       .subscribe(
