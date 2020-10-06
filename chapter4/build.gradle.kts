@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-  implementation("io.vertx:vertx-core:3.9.2")
+  implementation("io.vertx:vertx-core:3.9.3")
   implementation("ch.qos.logback:logback-classic:1.2.3")
 }
 
