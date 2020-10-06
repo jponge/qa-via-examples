@@ -42,7 +42,7 @@ public class SensorDataService {
     SensorDataService that = (SensorDataService) o;
     return delegate.equals(that.delegate);
   }
-  
+
   @Override
   public int hashCode() {
     return delegate.hashCode();
@@ -53,7 +53,7 @@ public class SensorDataService {
   );
 
   private final chapter6.SensorDataService delegate;
-  
+
   public SensorDataService(chapter6.SensorDataService delegate) {
     this.delegate = delegate;
   }
@@ -66,31 +66,31 @@ public class SensorDataService {
     return delegate;
   }
 
-  public static chapter6.reactivex.SensorDataService create(io.vertx.reactivex.core.Vertx vertx) { 
+  public static chapter6.reactivex.SensorDataService create(io.vertx.reactivex.core.Vertx vertx) {
     chapter6.reactivex.SensorDataService ret = chapter6.reactivex.SensorDataService.newInstance((chapter6.SensorDataService)chapter6.SensorDataService.create(vertx.getDelegate()));
     return ret;
   }
 
-  public static chapter6.reactivex.SensorDataService createProxy(io.vertx.reactivex.core.Vertx vertx, String address) { 
+  public static chapter6.reactivex.SensorDataService createProxy(io.vertx.reactivex.core.Vertx vertx, String address) {
     chapter6.reactivex.SensorDataService ret = chapter6.reactivex.SensorDataService.newInstance((chapter6.SensorDataService)chapter6.SensorDataService.createProxy(vertx.getDelegate(), address));
     return ret;
   }
 
-  public void valueFor(String sensorId, Handler<AsyncResult<JsonObject>> handler) { 
+  public void valueFor(String sensorId, Handler<AsyncResult<JsonObject>> handler) {
     delegate.valueFor(sensorId, handler);
   }
 
-  public Single<JsonObject> rxValueFor(String sensorId) { 
+  public Single<JsonObject> rxValueFor(String sensorId) {
     return io.vertx.reactivex.impl.AsyncResultSingle.toSingle(handler -> {
       valueFor(sensorId, handler);
     });
   }
 
-  public void average(Handler<AsyncResult<JsonObject>> handler) { 
+  public void average(Handler<AsyncResult<JsonObject>> handler) {
     delegate.average(handler);
   }
 
-  public Single<JsonObject> rxAverage() { 
+  public Single<JsonObject> rxAverage() {
     return io.vertx.reactivex.impl.AsyncResultSingle.toSingle(handler -> {
       average(handler);
     });
