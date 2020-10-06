@@ -7939,8 +7939,8 @@ verror@1.10.0:
     extsprintf "^1.2.0"
 
 vertx3-eventbus-client@^3.7.1:
-  version "3.9.3"
-  resolved "https://registry.yarnpkg.com/vertx3-eventbus-client/-/vertx3-eventbus-client-3.9.3.tgz#956215898b499f1075ab4c04e7f6fd41d7761034"
+  version "3.9.4-SNAPSHOT"
+  resolved "https://registry.yarnpkg.com/vertx3-eventbus-client/-/vertx3-eventbus-client-3.9.4-SNAPSHOT.tgz#956215898b499f1075ab4c04e7f6fd41d7761034"
   integrity sha512-7xAoCuaaQqeBeHjXkSn3L1hRqjcCT1Yffgtus7EeaA1zo4ge6FbSw5QOT4GGr5wSh8dWLekI8IJgnBlZtSVlFA==
   dependencies:
     sockjs-client "^1.1.5"
