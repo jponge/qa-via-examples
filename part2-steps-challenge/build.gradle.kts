@@ -9,7 +9,7 @@ plugins {
 }
 
 allprojects {
-  extra["vertxVersion"] = if (project.hasProperty("vertxVersion")) project.property("vertxVersion") else "3.9.4-SNAPSHOT"
+  extra["vertxVersion"] = if (project.hasProperty("vertxVersion")) project.property("vertxVersion") else "3.9.5-SNAPSHOT"
   extra["junit5Version"] = "5.6.1"
   extra["restAssuredVersion"] = "4.3.1"
   extra["logbackClassicVersion"] = "1.2.3"

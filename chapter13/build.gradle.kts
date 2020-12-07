@@ -3,7 +3,7 @@ plugins {
 }
 
 allprojects {
-  extra["vertxVersion"] = "3.9.4-SNAPSHOT"
+  extra["vertxVersion"] = "3.9.5-SNAPSHOT"
   extra["hzVersion"] = "1.5.3"
   extra["hzVersion"] = "2.0.1"
   extra["logbackClassicVersion"] = "1.2.3"

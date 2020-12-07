@@ -10,11 +10,11 @@ repositories {
 }
 
 dependencies {
-  implementation("io.vertx:vertx-core:3.9.4-SNAPSHOT")
-  implementation("io.vertx:vertx-infinispan:3.9.4-SNAPSHOT")
+  implementation("io.vertx:vertx-core:3.9.5-SNAPSHOT")
+  implementation("io.vertx:vertx-infinispan:3.9.5-SNAPSHOT")
   implementation("ch.qos.logback:logback-classic:1.2.3")
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.1")
-  testImplementation("io.vertx:vertx-junit5:3.9.4-SNAPSHOT")
+  testImplementation("io.vertx:vertx-junit5:3.9.5-SNAPSHOT")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.5.1")
 }
 
